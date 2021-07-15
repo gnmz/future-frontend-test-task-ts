@@ -31,7 +31,7 @@ const ViewRowCard: React.FC<IViewRowCardProps> = ({ row }) => {
     if (desc !== description) {
       textareaHandler(description);
     }
-  }, [description]);
+  }, [desc, description]);
 
   return (
     <div className="card p-3">

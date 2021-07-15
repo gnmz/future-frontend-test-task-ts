@@ -6,11 +6,13 @@ import ActionModeSelectors from "./components/ActionModeSelectors/ActionModeSele
 import { BIG_DATA, SMALL_URL } from "./config";
 import Table from "./components/Table/Table";
 import ViewRowCard from "./components/ViewRowCard/ViewRowCard";
+import TableSearch from "./components/TableSearch/TableSearch";
 
 const App: React.FC = () => {
   const [data, setData] = useState([]);
   const [error, setError] = useState(false);
   const [selectRow, setSelectRow] = useState(null);
+  const [searchData, setSearchData] = useState([]);
 
   const fetchSmallData = async () => {
     try {
@@ -36,6 +38,24 @@ const App: React.FC = () => {
     setSelectRow(item);
   };
 
+  const onSearch = (item: any) => {
+    if (item === "") {
+      setSearchData([]);
+    }
+    const searchbleData = data.filter((user: any) => {
+      return (
+        user["firstName"].toLowerCase().includes(item.toLowerCase()) ||
+        user["lastName"].toLowerCase().includes(item.toLowerCase()) ||
+        user["email"].toLowerCase().includes(item.toLowerCase()) ||
+        user["phone"].toLowerCase().includes(item.toLowerCase())
+      );
+    });
+
+    setSearchData(searchbleData);
+  };
+
+  const tableData = searchData.length > 0 ? searchData : data
+
   if (error) {
     return (
       <div>
@@ -50,7 +70,11 @@ const App: React.FC = () => {
         fetchSmallData={fetchSmallData}
         fetchBigData={fetchBigData}
       />
-      <Table data={data} selectedRow={selectedRow} />
+      <TableSearch onSearch={onSearch} />
+      <Table
+        data={tableData}
+        selectedRow={selectedRow}
+      />
       {selectRow && <ViewRowCard row={selectRow} />}
     </div>
   );
