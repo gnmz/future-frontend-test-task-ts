@@ -10,7 +10,7 @@ import ViewRowCard from "./components/ViewRowCard/ViewRowCard";
 const App: React.FC = () => {
   const [data, setData] = useState([]);
   const [error, setError] = useState(false);
-  const [selectRow, setSelectRow] = useState(null)
+  const [selectRow, setSelectRow] = useState(null);
 
   const fetchSmallData = async () => {
     try {
@@ -32,9 +32,9 @@ const App: React.FC = () => {
     }
   };
 
-  const selectedRow = (item:any) => {
-    setSelectRow(item)
-  }
+  const selectedRow = (item: any) => {
+    setSelectRow(item);
+  };
 
   if (error) {
     return (
@@ -44,8 +44,6 @@ const App: React.FC = () => {
     );
   }
 
-  console.log(selectRow)
-
   return (
     <div className="app">
       <ActionModeSelectors
@@ -53,7 +51,7 @@ const App: React.FC = () => {
         fetchBigData={fetchBigData}
       />
       <Table data={data} selectedRow={selectedRow} />
-      <ViewRowCard />
+      {selectRow && <ViewRowCard row={selectRow} />}
     </div>
   );
 };
