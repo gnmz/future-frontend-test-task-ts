@@ -1,0 +1,6 @@
+.action-mode-selectors {
+  display: flex;
+  justify-content: space-around;
+  width: 20%;
+  margin: 0 auto;
+}
