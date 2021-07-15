@@ -2,6 +2,7 @@ import "./TableBody.css";
 
 interface ITableBodyProps {
   data: any;
+  selectedRow: (item: any) => void;
 }
 
 interface IDataItem {
@@ -12,12 +13,12 @@ interface IDataItem {
   phone: string;
 }
 
-const TableBody: React.FC<ITableBodyProps> = ({ data }) => {
+const TableBody: React.FC<ITableBodyProps> = ({ data, selectedRow }) => {
   return (
     <tbody>
       {data.map((item: IDataItem, index: any) => (
-        <tr key={index}>
-          <th scope='row'>{item.id}</th>
+        <tr key={index} onClick={() => selectedRow(item)}>
+          <th scope="row">{item.id}</th>
           <td>{item.firstName}</td>
           <td>{item.lastName}</td>
           <td>{item.email}</td>

@@ -5,10 +5,12 @@ import "./App.css";
 import ActionModeSelectors from "./components/ActionModeSelectors/ActionModeSelectors";
 import { BIG_DATA, SMALL_URL } from "./config";
 import Table from "./components/Table/Table";
+import ViewRowCard from "./components/ViewRowCard/ViewRowCard";
 
 const App: React.FC = () => {
   const [data, setData] = useState([]);
   const [error, setError] = useState(false);
+  const [selectRow, setSelectRow] = useState(null)
 
   const fetchSmallData = async () => {
     try {
@@ -30,6 +32,10 @@ const App: React.FC = () => {
     }
   };
 
+  const selectedRow = (item:any) => {
+    setSelectRow(item)
+  }
+
   if (error) {
     return (
       <div>
@@ -38,13 +44,16 @@ const App: React.FC = () => {
     );
   }
 
+  console.log(selectRow)
+
   return (
     <div className="app">
       <ActionModeSelectors
         fetchSmallData={fetchSmallData}
         fetchBigData={fetchBigData}
       />
-      <Table data={data} />
+      <Table data={data} selectedRow={selectedRow} />
+      <ViewRowCard />
     </div>
   );
 };
