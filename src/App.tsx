@@ -8,17 +8,25 @@ import Table from "./components/Table/Table";
 import ViewRowCard from "./components/ViewRowCard/ViewRowCard";
 import TableSearch from "./components/TableSearch/TableSearch";
 import AddNewRow from "./components/AddNewRow/AddNewRow";
+import { sortByNumber } from "./utilities/sortByNumber";
 
 const App: React.FC = () => {
   const [data, setData] = useState<any>([]);
   const [error, setError] = useState(false);
   const [selectRow, setSelectRow] = useState(null);
   const [searchData, setSearchData] = useState([]);
+  const [sortDirection, setSortDirection] = useState<any>(null);
+  const [sortField, setSortField] = useState<any>(null);
 
   const fetchSmallData = async () => {
     try {
       let response = await axios.get(SMALL_URL);
-      setData(response.data);
+
+      let sorted = sortByNumber(response.data, "id");
+      setData(sorted.sortedData);
+      setSortDirection(sorted.direction);
+      setSortField(sorted.sortField);
+
       setError(false);
     } catch (error) {
       setError(true);
@@ -28,7 +36,12 @@ const App: React.FC = () => {
   const fetchBigData = async () => {
     try {
       let response = await axios.get(BIG_DATA);
-      setData(response.data);
+
+      let sorted = sortByNumber(response.data, "id");
+      setData(sorted.sortedData);
+      setSortDirection(sorted.direction);
+      setSortField(sorted.sortField);
+
       setError(false);
     } catch (error) {
       setError(true);
@@ -55,7 +68,14 @@ const App: React.FC = () => {
     setSearchData(searchbleData);
   };
 
-  const tableData = searchData.length > 0 ? searchData : data
+  const sortHandler = (item: any) => {
+    const { sortedData, direction, sortField } = item;
+    setData(sortedData);
+    setSortDirection(direction);
+    setSortField(sortField);
+  };
+
+  const tableData = searchData.length > 0 ? searchData : data;
 
   if (error) {
     return (
@@ -66,9 +86,9 @@ const App: React.FC = () => {
   }
 
   const addNewRow = (item: any) => {
-     data.unshift(item);
-    setData([...data])
-  }
+    data.unshift(item);
+    setData([...data]);
+  };
 
   return (
     <div className="app">
@@ -79,6 +99,9 @@ const App: React.FC = () => {
       <TableSearch onSearch={onSearch} />
       <AddNewRow addNewRow={addNewRow} />
       <Table
+        sortDirection={sortDirection}
+        sortField={sortField}
+        sortHandler={sortHandler}
         data={tableData}
         selectedRow={selectedRow}
       />
