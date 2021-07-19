@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import FormInputHook from "../FormInputHook/FormInputHook";
 
-import { useIdInput } from "../../hooks/usIdInput";
+import { useIdInput } from "../../hooks/useIdInput";
 import { useNameInput } from "../../hooks/useNameInput";
 import { usePhoneInput } from "../../hooks/usePhoneInput";
 import { useEmailInput } from "../../hooks/useEmailInput";
