@@ -33,6 +33,21 @@ const ViewRowCard: React.FC<IViewRowCardProps> = ({ row }) => {
     }
   }, [desc, description]);
 
+
+  if (!city) {
+    return (
+      <div className="card p-3">
+        <p>
+          Выбран пользователь{" "}
+          <b>
+            {firstName} {lastName}
+          </b>
+        </p>
+        <p>У пользователя описание и адрес еще не добавлены</p>
+      </div>
+    );
+  }
+
   return (
     <div className="card p-3">
       <p>

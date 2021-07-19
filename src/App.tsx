@@ -7,9 +7,10 @@ import { BIG_DATA, SMALL_URL } from "./config";
 import Table from "./components/Table/Table";
 import ViewRowCard from "./components/ViewRowCard/ViewRowCard";
 import TableSearch from "./components/TableSearch/TableSearch";
+import AddNewRow from "./components/AddNewRow/AddNewRow";
 
 const App: React.FC = () => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<any>([]);
   const [error, setError] = useState(false);
   const [selectRow, setSelectRow] = useState(null);
   const [searchData, setSearchData] = useState([]);
@@ -64,6 +65,11 @@ const App: React.FC = () => {
     );
   }
 
+  const addNewRow = (item: any) => {
+     data.unshift(item);
+    setData([...data])
+  }
+
   return (
     <div className="app">
       <ActionModeSelectors
@@ -71,6 +77,7 @@ const App: React.FC = () => {
         fetchBigData={fetchBigData}
       />
       <TableSearch onSearch={onSearch} />
+      <AddNewRow addNewRow={addNewRow} />
       <Table
         data={tableData}
         selectedRow={selectedRow}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import useInput from "../../hooks/useInput";
 import "./TableSearch.css";
 
 interface ITableSearchProps {
@@ -6,25 +6,26 @@ interface ITableSearchProps {
 }
 
 const TableSearch: React.FC<ITableSearchProps> = ({ onSearch }) => {
-  const [searchValue, setSearchValue] = useState("");
-
-  const searhValueHandler: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    setSearchValue(e.target.value);
-  };
+  const search = useInput("");
 
   return (
-    <div style={{ display: "flex", margin: "20px 0" }}>
+    <div
+      style={{
+        display: "flex",
+        margin: "20px 0",
+        justifyContent: "space-between",
+      }}
+    >
       <div
         className="form-control mr-sm-2"
-        style={{ marginRight: "20px", display: "flex" }}
+        style={{ display: "flex", width: "90%", marginRight: "20px" }}
       >
         <input
           style={{ width: "98%", border: "none", outline: "none" }}
           type="text"
           placeholder="Search"
           aria-label="Search"
-          value={searchValue}
-          onChange={searhValueHandler}
+          {...search}
         />
         <button
           style={{
@@ -39,7 +40,11 @@ const TableSearch: React.FC<ITableSearchProps> = ({ onSearch }) => {
         </button>
       </div>
 
-      <button className="btn btn-primary" onClick={() => onSearch(searchValue)}>
+      <button
+        style={{ width: "97px" }}
+        className="btn btn-primary"
+        onClick={() => onSearch(search.item)}
+      >
         Search
       </button>
     </div>
