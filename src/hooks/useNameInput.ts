@@ -17,6 +17,7 @@ export const useNameInput = (init: any) => {
         value: currentValue,
         error: "Поле не может быть пустым",
         valided: false,
+        isDirty: true
       });
     } else {
       if (!match) {
@@ -25,10 +26,11 @@ export const useNameInput = (init: any) => {
           value: currentValue,
           error: "Некорректный формат",
           valided: false,
+          isDirty: true
         });
       }
       if (match) {
-        setItem({ ...item, value: currentValue, error: "", valided: true });
+        setItem({ ...item, value: currentValue, error: "", valided: true, isDirty: false });
       }
     }
   };
@@ -39,9 +41,20 @@ export const useNameInput = (init: any) => {
     }
   };
 
+  const onBlur:React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    if(!item.valided) {
+        setItem({...item, isDirty: true})
+    } else if (item.value === '') {
+        setItem({...item, error: 'Поле не может быть пустым', valided: false, isDirty: true})
+    } else {
+        setItem({...item, isDirty: false})
+    }
+}
+
   return {
     item,
     onChange,
     resetItem,
+    onBlur
   };
 };

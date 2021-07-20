@@ -52,9 +52,20 @@ export const usePhoneInput = (init: any) => {
     }
   };
 
+  const onBlur:React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    if(!item.valided) {
+        setItem({...item, isDirty: true})
+    } else if (item.value === '') {
+        setItem({...item, error: 'Поле не может быть пустым', valided: false, isDirty: true})
+    } else {
+        setItem({...item, isDirty: false})
+    }
+}
+
   return {
     item,
     onChange,
     resetItem,
+    onBlur
   };
 };

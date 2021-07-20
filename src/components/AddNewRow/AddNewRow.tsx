@@ -6,6 +6,7 @@ import { useIdInput } from "../../hooks/useIdInput";
 import { useNameInput } from "../../hooks/useNameInput";
 import { usePhoneInput } from "../../hooks/usePhoneInput";
 import { useEmailInput } from "../../hooks/useEmailInput";
+import { useEffect } from "react";
 
 interface IAddNewRowProps {
   addNewRow: (item: any) => void;
@@ -14,11 +15,34 @@ interface IAddNewRowProps {
 const AddNewRow: React.FC<IAddNewRowProps> = ({ addNewRow }) => {
   const [isOpenForm, setIsOpenForm] = useState(false);
 
-  const id = useIdInput({ value: "", error: "", valided: true });
-  const firstName = useNameInput({ value: "", error: "", valided: true });
-  const lastName = useNameInput({ value: "", error: "", valided: true });
-  const email = useEmailInput({ value: "", error: "", valided: true });
-  const phone = usePhoneInput({ value: "", error: "", valided: true });
+  const id = useIdInput({ value: "", error: "", valided: true, isDirty: true });
+  const firstName = useNameInput({ value: "", error: "", valided: true, isDirty: true });
+  const lastName = useNameInput({ value: "", error: "", valided: true, isDirty: true });
+  const email = useEmailInput({ value: "", error: "", valided: true, isDirty: true });
+  const phone = usePhoneInput({ value: "", error: "", valided: true, isDirty: true });
+  const [disabledBtn, setDisableBtn] = useState(true)
+
+  useEffect(()=>{
+    
+
+    if(
+      (id.item.valided === true && id.item.value) &&
+      (firstName.item.valided === true && firstName.item.value) &&
+      (lastName.item.valided === true && lastName.item.value)&&
+      (email.item.valided === true && email.item.value)&&
+      (phone.item.valided === true && phone.item.value)
+      ){
+      setDisableBtn(true)
+    }else {
+      setDisableBtn(false)
+    }
+  },[
+      id.item.valided, id.item.value, 
+      firstName.item.value, firstName.item.valided, 
+      lastName.item.valided, lastName.item.value, 
+      phone.item.valided, phone.item.value, 
+      email.item.valided, email.item.value
+    ])
 
   const addRow = () => {
     const newRow = {
@@ -97,6 +121,7 @@ const AddNewRow: React.FC<IAddNewRowProps> = ({ addNewRow }) => {
           className="btn btn-outline-primary"
           style={{ marginBottom: "5px" }}
           onClick={addRow}
+          disabled={!disabledBtn}
         >
           Добавить
         </button>
