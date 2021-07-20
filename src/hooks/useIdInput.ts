@@ -19,7 +19,6 @@ export const useIdInput = (init: any) => {
                 setItem({...item, value: currentValue, error: '', valided: true})
             }
         }
-        
     }
 
     return{

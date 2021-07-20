@@ -1,6 +1,7 @@
-let direction: string = "desc";
+
 
 export const sortByNumber = (arr: any[], sortField: any) => {
+  let direction: string = "desc";
   let sortedData = [...arr];
   if (direction === "asc") {
     direction = "desc";

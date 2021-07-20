@@ -1,4 +1,4 @@
-import useInput from "../../hooks/useInput";
+import {  useState } from "react";
 import "./TableSearch.css";
 
 interface ITableSearchProps {
@@ -6,7 +6,22 @@ interface ITableSearchProps {
 }
 
 const TableSearch: React.FC<ITableSearchProps> = ({ onSearch }) => {
-  const search = useInput("");
+  const [search, setSearch] = useState("");
+
+  const resetSearch = () => {
+    setSearch("");
+    onSearch("")
+  };
+
+  const searchHandler: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    setSearch(e.target.value);
+  };
+
+  const onKeyDown:React.KeyboardEventHandler<HTMLInputElement> = (e) => {
+    if(e.key === 'Enter'){
+      onSearch(search)
+    }
+  }
 
   return (
     <div
@@ -25,7 +40,9 @@ const TableSearch: React.FC<ITableSearchProps> = ({ onSearch }) => {
           type="text"
           placeholder="Search"
           aria-label="Search"
-          {...search}
+          value={search}
+          onChange={searchHandler}
+          onKeyDown={onKeyDown}
         />
         <button
           style={{
@@ -34,7 +51,7 @@ const TableSearch: React.FC<ITableSearchProps> = ({ onSearch }) => {
             padding: "0 5px",
             borderRadius: "50%",
           }}
-          onClick={() => onSearch("")}
+          onClick={resetSearch}
         >
           X
         </button>
@@ -43,7 +60,7 @@ const TableSearch: React.FC<ITableSearchProps> = ({ onSearch }) => {
       <button
         style={{ width: "97px" }}
         className="btn btn-primary"
-        onClick={() => onSearch(search.item)}
+        onClick={() => onSearch(search)}
       >
         Search
       </button>

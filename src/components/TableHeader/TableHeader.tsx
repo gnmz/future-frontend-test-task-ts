@@ -11,7 +11,6 @@ interface ITableHeaderProps {
 }
 
 const TableHeader: React.FC<ITableHeaderProps> = ({data, sortHandler, sortField, sortDirection}) => {
-
   return (
     <thead>
       <tr>

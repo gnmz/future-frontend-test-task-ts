@@ -11,7 +11,7 @@ interface IAddNewRowProps {
   addNewRow: (item: any) => void;
 }
 
-const AddNewRow: React.FC<IAddNewRowProps> = ({addNewRow}) => {
+const AddNewRow: React.FC<IAddNewRowProps> = ({ addNewRow }) => {
   const [isOpenForm, setIsOpenForm] = useState(false);
 
   const id = useIdInput({ value: "", error: "", valided: true });
@@ -27,15 +27,19 @@ const AddNewRow: React.FC<IAddNewRowProps> = ({addNewRow}) => {
       lastName: lastName.item.value,
       email: email.item.value,
       phone: phone.item.value,
-      description:'',
+      description: "",
       address: {
         city: "",
         state: "",
         streetAddress: "",
         zip: "",
-      }
+      },
     };
-    addNewRow(newRow)
+    addNewRow(newRow);
+  };
+
+  const resetForm = () => {
+    // id.resetItem(true)
   };
 
   if (!isOpenForm) {
@@ -86,10 +90,7 @@ const AddNewRow: React.FC<IAddNewRowProps> = ({addNewRow}) => {
         >
           Добавить
         </button>
-        <button
-          className="btn btn-outline-primary"
-          onClick={() => setIsOpenForm(false)}
-        >
+        <button className="btn btn-outline-primary" onClick={resetForm}>
           Закрыть
         </button>
       </div>

@@ -2,13 +2,17 @@ import { useState } from "react";
 import axios from "axios";
 
 import "./App.css";
-import ActionModeSelectors from "./components/ActionModeSelectors/ActionModeSelectors";
+
 import { BIG_DATA, SMALL_URL } from "./config";
+import { sortByNumber } from "./utilities/sortByNumber";
+
+import ActionModeSelectors from "./components/ActionModeSelectors/ActionModeSelectors";
 import Table from "./components/Table/Table";
 import ViewRowCard from "./components/ViewRowCard/ViewRowCard";
 import TableSearch from "./components/TableSearch/TableSearch";
 import AddNewRow from "./components/AddNewRow/AddNewRow";
-import { sortByNumber } from "./utilities/sortByNumber";
+import Pagination from "./components/Pagination/Pagination";
+import Loader from "./components/Loader/Loader";
 
 const App: React.FC = () => {
   const [data, setData] = useState<any>([]);
@@ -17,8 +21,14 @@ const App: React.FC = () => {
   const [searchData, setSearchData] = useState([]);
   const [sortDirection, setSortDirection] = useState<any>(null);
   const [sortField, setSortField] = useState<any>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [pageSize, setPageSize] = useState(50);
+  const [loading, setLoading] = useState(false);
 
   const fetchSmallData = async () => {
+    setLoading(true);
+    setSearchData([]);
     try {
       let response = await axios.get(SMALL_URL);
 
@@ -26,7 +36,7 @@ const App: React.FC = () => {
       setData(sorted.sortedData);
       setSortDirection(sorted.direction);
       setSortField(sorted.sortField);
-
+      setLoading(false);
       setError(false);
     } catch (error) {
       setError(true);
@@ -34,6 +44,8 @@ const App: React.FC = () => {
   };
 
   const fetchBigData = async () => {
+    setLoading(true);
+    setSearchData([]);
     try {
       let response = await axios.get(BIG_DATA);
 
@@ -41,7 +53,7 @@ const App: React.FC = () => {
       setData(sorted.sortedData);
       setSortDirection(sorted.direction);
       setSortField(sorted.sortField);
-
+      setLoading(false);
       setError(false);
     } catch (error) {
       setError(true);
@@ -56,16 +68,19 @@ const App: React.FC = () => {
     if (item === "") {
       setSearchData([]);
     }
-    const searchbleData = data.filter((user: any) => {
-      return (
-        user["firstName"].toLowerCase().includes(item.toLowerCase()) ||
-        user["lastName"].toLowerCase().includes(item.toLowerCase()) ||
-        user["email"].toLowerCase().includes(item.toLowerCase()) ||
-        user["phone"].toLowerCase().includes(item.toLowerCase())
-      );
-    });
-
-    setSearchData(searchbleData);
+    if (item) {
+      
+      const searchbleData = data.filter((user: any) => {
+        return (
+          user["firstName"].toLowerCase().includes(item.toLowerCase()) ||
+          user["lastName"].toLowerCase().includes(item.toLowerCase()) ||
+          user["email"].toLowerCase().includes(item.toLowerCase()) ||
+          user["phone"].toLowerCase().includes(item.toLowerCase())
+        );
+      });
+      setSearchData(searchbleData);
+    }
+    
   };
 
   const sortHandler = (item: any) => {
@@ -73,9 +88,36 @@ const App: React.FC = () => {
     setData(sortedData);
     setSortDirection(direction);
     setSortField(sortField);
+    if (searchData.length > 1) {
+      setSearchData(sortedData);
+      setSortDirection(direction);
+      setSortField(sortField);
+    }
   };
 
-  const tableData = searchData.length > 0 ? searchData : data;
+  const tableData = searchData.length >= 1 ? searchData : data;
+
+  const sendData = (arr: any[]) => {
+    let updArr = [...arr];
+    if (data.length > 50) {
+      updArr = updArr.slice(
+        pageSize * (currentPage - 1),
+        pageSize * currentPage
+      );
+    }
+    return updArr;
+  };
+
+  const pagesCount = Math.ceil(tableData.length / pageSize);
+
+  const addNewRow = (item: any) => {
+    data.unshift(item);
+    setData([...data]);
+  };
+
+  const getCurrentPage = (item: number) => {
+    setCurrentPage(item);
+  };
 
   if (error) {
     return (
@@ -85,10 +127,17 @@ const App: React.FC = () => {
     );
   }
 
-  const addNewRow = (item: any) => {
-    data.unshift(item);
-    setData([...data]);
-  };
+  if (loading) {
+    return (
+      <div className="app">
+        <ActionModeSelectors
+          fetchSmallData={fetchSmallData}
+          fetchBigData={fetchBigData}
+        />
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <div className="app">
@@ -102,9 +151,17 @@ const App: React.FC = () => {
         sortDirection={sortDirection}
         sortField={sortField}
         sortHandler={sortHandler}
-        data={tableData}
+        data={sendData(tableData)}
         selectedRow={selectedRow}
       />
+      {tableData.length > 50 && (
+        <Pagination
+          currentPage={currentPage}
+          pagesCount={pagesCount}
+          getCurrentPage={getCurrentPage}
+        />
+      )}
+
       {selectRow && <ViewRowCard row={selectRow} />}
     </div>
   );
