@@ -154,7 +154,7 @@ const App: React.FC = () => {
         fetchSmallData={fetchSmallData}
         fetchBigData={fetchBigData}
       />
-      <TableSearch onSearch={onSearch} />
+      <TableSearch onSearch={onSearch} searchData={searchData} />
       <AddNewRow addNewRow={addNewRow} />
       <Table
         sortDirection={sortDirection}
