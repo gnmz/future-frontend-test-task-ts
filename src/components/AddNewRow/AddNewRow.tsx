@@ -36,11 +36,21 @@ const AddNewRow: React.FC<IAddNewRowProps> = ({ addNewRow }) => {
       },
     };
     addNewRow(newRow);
+    resetForm()
   };
 
   const resetForm = () => {
-    // id.resetItem(true)
+    id.resetItem(true);
+    firstName.resetItem(true);
+    lastName.resetItem(true);
+    email.resetItem(true);
+    phone.resetItem(true);
   };
+
+  const closeForm = () => {
+    setIsOpenForm(false)
+    resetForm()
+  }
 
   if (!isOpenForm) {
     return (
@@ -90,7 +100,7 @@ const AddNewRow: React.FC<IAddNewRowProps> = ({ addNewRow }) => {
         >
           Добавить
         </button>
-        <button className="btn btn-outline-primary" onClick={resetForm}>
+        <button className="btn btn-outline-primary" onClick={closeForm}>
           Закрыть
         </button>
       </div>

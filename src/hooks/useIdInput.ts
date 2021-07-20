@@ -21,8 +21,15 @@ export const useIdInput = (init: any) => {
         }
     }
 
+    const resetItem = (detail: boolean) => {
+        if(detail === true){
+            setItem({...item, value: '', error: '', valided: true})
+        }
+    }
+
     return{
         item,
-        onChange
+        onChange,
+        resetItem
     }
 };
