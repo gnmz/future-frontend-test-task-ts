@@ -69,7 +69,6 @@ const App: React.FC = () => {
       setSearchData([]);
     }
     if (item) {
-      
       const searchbleData = data.filter((user: any) => {
         return (
           user["firstName"].toLowerCase().includes(item.toLowerCase()) ||
@@ -80,7 +79,6 @@ const App: React.FC = () => {
       });
       setSearchData(searchbleData);
     }
-    
   };
 
   const sortHandler = (item: any) => {
@@ -135,6 +133,17 @@ const App: React.FC = () => {
           fetchBigData={fetchBigData}
         />
         <Loader />
+      </div>
+    );
+  }
+
+  if (data.length <= 0) {
+    return (
+      <div className="app">
+        <ActionModeSelectors
+          fetchSmallData={fetchSmallData}
+          fetchBigData={fetchBigData}
+        />
       </div>
     );
   }
