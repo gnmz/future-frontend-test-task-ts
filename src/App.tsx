@@ -117,10 +117,15 @@ const App: React.FC = () => {
     setCurrentPage(item);
   };
 
+
   if (error) {
     return (
-      <div>
-        <h1>Ошибка загрузки</h1>
+      <div className="app">
+        <ActionModeSelectors
+          fetchSmallData={fetchSmallData}
+          fetchBigData={fetchBigData}
+        />
+        <h1 style={{margin: '20px 0', textAlign:'center'}}>Упс что-то пошло не так</h1>
       </div>
     );
   }
